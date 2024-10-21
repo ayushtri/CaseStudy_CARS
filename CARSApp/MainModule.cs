@@ -93,8 +93,9 @@ internal class MainModule
                     Console.WriteLine("Enter Contact Information:");
                     newSuspect.ContactInformation = Console.ReadLine();
 
-                    bool isSuspectAdded = suspectDAO.AddSuspect(newSuspect);
-                    Console.WriteLine(isSuspectAdded ? "Suspect added successfully!" : "Failed to add suspect.");
+                    int newSuspectID = suspectDAO.AddSuspect(newSuspect);
+                    bool isSuspectAdded = newSuspectID != 0;
+                    Console.WriteLine(isSuspectAdded ? $"Suspect added successfully! SuspectID: {newSuspectID}" : "Failed to add suspect.");
                     Console.WriteLine();
                     Console.WriteLine();
                     break;
@@ -174,8 +175,9 @@ internal class MainModule
                     Console.WriteLine("Enter Contact Information:");
                     newVictim.ContactInformation = Console.ReadLine();
 
-                    bool isVictimAdded = victimDAO.AddVictim(newVictim);
-                    Console.WriteLine(isVictimAdded ? "Victim added successfully!" : "Failed to add victim.");
+                    int newVictimID = victimDAO.AddVictim(newVictim);
+                    bool isVictimAdded = newVictimID != 0;
+                    Console.WriteLine(isVictimAdded ? $"Victim added successfully! VictimID: { newVictimID }" : "Failed to add victim.");
 
                     Console.WriteLine();
                     Console.WriteLine();
@@ -274,7 +276,7 @@ internal class MainModule
 
                     int createdIncidentID = crimeService.CreateIncident(newIncident);
                     bool isCreated = createdIncidentID != 0;
-                    Console.WriteLine(isCreated ? "Incident created successfully!" : "Failed to create incident.");
+                    Console.WriteLine(isCreated ? $"Incident created successfully! IncidentID: {createdIncidentID}" : "Failed to create incident.");
 
                     Console.WriteLine();
                     Console.WriteLine();

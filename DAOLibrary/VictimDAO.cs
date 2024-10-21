@@ -13,7 +13,7 @@ namespace DAOLibrary
     {
         private string connectionString = UtilLibrary.DBConnection.ReturnCn("dbCn");
 
-        public bool AddVictim(Victim victim)
+        public int AddVictim(Victim victim)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
@@ -28,11 +28,14 @@ namespace DAOLibrary
                     command.Parameters.AddWithValue("@Gender", victim.Gender);
                     command.Parameters.AddWithValue("@ContactInformation", victim.ContactInformation);
 
-                   
-                    int newVictimId = Convert.ToInt32(command.ExecuteScalar());
-                    victim.VictimId = newVictimId;
+                    object result = command.ExecuteScalar();
 
-                    return newVictimId > 0;
+                    if (result == null || !int.TryParse(result.ToString(), out int newVictimId) || newVictimId <= 0)
+                    {
+                        throw new Exception("Failed to add victim.");
+                    }
+
+                    return newVictimId;
                 }
             }
         }

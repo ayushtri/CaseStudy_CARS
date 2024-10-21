@@ -13,7 +13,27 @@ namespace DAOLibrary
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
                 sqlConnection.Open();
-                
+
+                using (SqlCommand checkVictimCmd = new SqlCommand("SELECT COUNT(1) FROM Victims WHERE VictimID = @VictimId", sqlConnection))
+                {
+                    checkVictimCmd.Parameters.AddWithValue("@VictimId", incident.VictimId);
+                    int victimExists = (int)checkVictimCmd.ExecuteScalar();
+                    if (victimExists == 0)
+                    {
+                        throw new Exception("Victim ID does not exist.");
+                    }
+                }
+
+                using (SqlCommand checkSuspectCmd = new SqlCommand("SELECT COUNT(1) FROM Suspects WHERE SuspectID = @SuspectId", sqlConnection))
+                {
+                    checkSuspectCmd.Parameters.AddWithValue("@SuspectId", incident.SuspectId);
+                    int suspectExists = (int)checkSuspectCmd.ExecuteScalar();
+                    if (suspectExists == 0)
+                    {
+                        throw new Exception("Suspect ID does not exist.");
+                    }
+                }
+
                 using (SqlCommand command = new SqlCommand("INSERT INTO Incidents (IncidentType, IncidentDate, Location, Description, Status, VictimId, SuspectId) VALUES (@IncidentType, @IncidentDate, @Location, @Description, @Status, @VictimId, @SuspectId); SELECT SCOPE_IDENTITY()", sqlConnection))
                 {
                     command.Parameters.AddWithValue("@IncidentType", incident.IncidentType);
@@ -24,7 +44,6 @@ namespace DAOLibrary
                     command.Parameters.AddWithValue("@VictimId", incident.VictimId);
                     command.Parameters.AddWithValue("@SuspectId", incident.SuspectId);
 
-             
                     object result = command.ExecuteScalar();
                     if (result != null && int.TryParse(result.ToString(), out int newIncidentId))
                     {

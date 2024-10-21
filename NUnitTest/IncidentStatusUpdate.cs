@@ -13,11 +13,11 @@ namespace NUnitTest
             {
                 IncidentType = "Theft",
                 IncidentDate = DateTime.Parse("2024-10-22"),
-                Location = "Central Park",
-                Description = "A purse was stolen from a bench again",
+                Location = "Central Park, NYC",
+                Description = "A car was stolen from a parking lot. again 2",
                 Status = "Active",
-                VictimId = 2,
-                SuspectId = 2
+                VictimId = 4,
+                SuspectId = 4
             };
 
             int createdIncidentID = crimeAnalysisService.CreateIncident(incident);

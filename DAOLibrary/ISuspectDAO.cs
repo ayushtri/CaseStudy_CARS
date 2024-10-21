@@ -9,7 +9,7 @@ namespace DAOLibrary
 {
     internal interface ISuspectDAO
     {
-        public bool AddSuspect(Suspect suspect);
+        public int AddSuspect(Suspect suspect);
         public Suspect GetSuspectById(int suspectId);
         public List<Suspect> GetAllSuspects();
     }

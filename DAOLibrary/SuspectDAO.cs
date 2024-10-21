@@ -12,7 +12,7 @@ namespace DAOLibrary
     public class SuspectDAO : ISuspectDAO
     {
         private string connectionString = UtilLibrary.DBConnection.ReturnCn("dbCn");
-        public bool AddSuspect(Suspect suspect)
+        public int AddSuspect(Suspect suspect)
         {
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             {
@@ -27,10 +27,14 @@ namespace DAOLibrary
                     command.Parameters.AddWithValue("@Gender", suspect.Gender);
                     command.Parameters.AddWithValue("@ContactInformation", suspect.ContactInformation);
 
-                    int newSuspectId = Convert.ToInt32(command.ExecuteScalar());
-                    suspect.SuspectId = newSuspectId; 
+                    object result = command.ExecuteScalar();
 
-                    return newSuspectId > 0;
+                    if (result == null || !int.TryParse(result.ToString(), out int newSuspectId) || newSuspectId <= 0)
+                    {
+                        throw new Exception("Failed to add suspect.");
+                    }
+
+                    return newSuspectId;
                 }
             }
         }
